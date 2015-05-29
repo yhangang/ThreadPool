@@ -268,7 +268,7 @@ public class MyThreadPool {
 
 			Thread.sleep(3 * 1000);
 			m_logger.info(MyThreadPool.getInstance().getCurPoolSize());
-			// MyThreadPool.getInstance().shutdown();
+			 MyThreadPool.getInstance().shutdown();
 			m_logger.info("--------------------");
 
 		} catch (Exception e) {
