@@ -1,8 +1,5 @@
 package threadPool;
 
-import inf.Executor;
-import inf.Task;
-
 import java.util.LinkedList;
 
 public class ThreadPool {
@@ -10,6 +7,7 @@ public class ThreadPool {
 
 	private boolean closed;
 	private LinkedList<Executor> pool;
+	private LinkedList<Executor> runningPool;
 	private static ThreadPool instance;
 
 	/**
@@ -18,6 +16,7 @@ public class ThreadPool {
 	private ThreadPool() {
 		closed = false;
 		pool = new LinkedList<Executor>();
+		runningPool = new LinkedList<Executor>();
 		for (int i = 0; i < minPoolSize; i++) {
 			Executor executor = new ExecutorImpl();
 			pool.add(executor);
@@ -41,12 +40,14 @@ public class ThreadPool {
 	}
 
 	public void destroy() {
-//		 synchronized (pool) {
-//		 closed = true;
-//		 pool.notifyAll();
-//		 pool.clear();
-//		 
-//		 }
+		 synchronized (pool) {
+		 closed = true;
+		 pool.notifyAll();
+		 pool.clear();
+		 }
+		 synchronized (runningPool) {
+			 runningPool.clear();
+			 }
 	}
 
 	public Executor getExecutor() {
@@ -68,6 +69,9 @@ public class ThreadPool {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		synchronized (runningPool) {
+			runningPool.addFirst(executor);
 		}
 		return executor;
 	}
@@ -108,6 +112,9 @@ public class ThreadPool {
 					pool.addFirst(this);
 					pool.notifyAll();
 					System.out.println("归还线程，剩余线程数量：" + pool.size());
+				}
+				synchronized (runningPool) {
+					runningPool.remove(this);
 				}
 			}
 		}

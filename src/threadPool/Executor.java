@@ -1,4 +1,4 @@
-package inf;
+package threadPool;
 
 public interface Executor {
 	void setTask(Task task);

@@ -1,10 +1,7 @@
-package test;
+package threadPool;
 
-import inf.Executor;
-import inf.Task;
-import threadPool.ThreadPool2;
 
-public class ThreadTest {
+public class Run {
 	class MyTask implements Task {
 		String name;
 
@@ -28,8 +25,8 @@ public class ThreadTest {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		ThreadTest test = new ThreadTest();
-		ThreadPool2 pool = ThreadPool2.getInstance();
+		Run test = new Run();
+		ThreadPool pool = ThreadPool.getInstance();
 		for(int i=0;i<10;i++){
 			Executor executor = (Executor) pool.getExecutor();
 			MyTask mytask = test.new MyTask(String.valueOf(i));
